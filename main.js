@@ -6,11 +6,11 @@ function preload() {
     game.load.image('platform', 'assets/Red-UFO.png', );
     game.load.image('ice-platform', 'assets/Gray-UFO.png');
     game.load.image('star', 'assets/star.png');
+    game.load.image("asteroid", "assets/Asteroid.png");
     game.load.spritesheet('player', 'assets/UnicornFramesLarger.png', 64, 64);
     game.load.audio("background-music", "assets/backgroundMusic.mp3");
     game.load.audio("collect-sound", "assets/collectSound.mp3");
     game.load.audio("jump-sound", "assets/jumpSound.mp3");
-    game.load.image("asteroid", "assets/theasteroid.png");
     
 
  
