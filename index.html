@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Unicorn Death Squad</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/phaser-ce/2.10.6/phaser.js"></script>
+
+    <script src = "./js/boot.js"></script>
+    <script src = "./js/preloader.js"></script>
+    <script src = "./js/main.js"></script>
+    <script src = "./js/level1.js"></script>
+    <script src = "./js/level2.js"></script>
+    <script src = "./js/game-over.js"></script>
+
+</head>
+<body>
+
+    <div id = "mainGame"></div>
+    <script>
+        window.onload = function(){
+        var game = new Phaser.Game(800, 600, Phaser.CANVAS, "mainGame");
+
+        // This is where we are adding our different game states
+        game.state.add("boot", Boot);
+        game.state.add("preload", Preloader);
+        game.state.add("main", MainMenu);
+        game.state.add("level1", Level1);
+        game.state.add("level2", Level2);
+        game.state.add("gameOver", GameOver);
+
+        // We are starting our Boot State here
+        game.state.start("boot", true, false);
+        
+        }
+        
+    </script>
+    
+</body>
+</html>
