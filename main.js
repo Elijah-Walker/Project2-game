@@ -30,7 +30,7 @@ function preload() {
     game.load.image('background', 'assets/bg.jpg');
     game.load.image('platform', 'assets/Red-UFO.png', );
     game.load.image('ice-platform', 'assets/Gray-UFO.png');
-    game.load.image('star', 'assets/Star.png');
+    game.load.image('star', 'assets/star.png');
     game.load.spritesheet('player', 'assets/UnicornFramesLarger.png', 64, 64);
  
 }
