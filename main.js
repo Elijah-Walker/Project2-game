@@ -10,7 +10,7 @@ function preload() {
     game.load.audio("background-music", "assets/backgroundMusic.mp3");
     game.load.audio("collect-sound", "assets/collectSound.mp3");
     game.load.audio("jump-sound", "assets/jumpSound.mp3");
-    game.load.image("asteroid", "assets/Asteroid.png");
+    game.load.image("asteroid", "assets/theasteroid.png");
     
 
  
