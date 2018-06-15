@@ -1,28 +1,3 @@
-// Game.MainMenu = function(game){
-
-// };
-
-// var gameBackground;
-// var button;
-
-// Game.MainMenu.prototype = {
-//     create: function(game){
-//         gameBackground = game.add.sprite(game.world.centerX, game.world.centerY -192, "menuScreen");
-//         button = game.add.button(game.world.centerX, game.world.centerY, "startButton", function(){
-//             this.state.start("level1", true, false);
-
-//         button.anchor.x = 0.5;
-//         button.anchor.y = 0.5;    
-//         });
-        
-//         mainMenuMusic = game.add.audio(game, "<name of background song>", 1, true)
-//         mainMenuMusic.play();
-//     },
-//     update: function(game){
-
-//     }
-// }
-
 var game = new Phaser.Game(800, 600, Phaser.CANVAS, 'phaser-example', { preload: preload, create: create, update: update, render: render });
 
 function preload() {
@@ -32,6 +7,12 @@ function preload() {
     game.load.image('ice-platform', 'assets/Gray-UFO.png');
     game.load.image('star', 'assets/star.png');
     game.load.spritesheet('player', 'assets/UnicornFramesLarger.png', 64, 64);
+    game.load.image("asteroid", "assets/Asteroid.png");
+    game.load.audio("background-music", "assets/backgroundMusic.mp3");
+    game.load.audio("collect-sound", "assets/collectSound.mp3");
+    game.load.audio("jump-sound", "assets/jumpSound.mp3");
+    
+
  
 }
 var platforms;
@@ -44,8 +25,13 @@ var jumpButton;
 var bg;
 var score = 0
 var scoreText;
+var asteroids;
+
 
 function create() {
+    backgroundMusic = game.add.audio("background-music");
+    backgroundMusic.play("", 0, 1, true);
+    
 
     this.game.renderer.renderSession.roundPixels = true;
 
@@ -94,7 +80,8 @@ function create() {
 
     stars.setAll('body.allowGravity', false);
 
-
+    
+    
 //Platform physics
     platforms = this.add.physicsGroup();
 
@@ -127,6 +114,27 @@ function create() {
 
     platforms.setAll('body.allowGravity', false);
     platforms.setAll('body.immovable', true);
+
+    asteroids = this.add.physicsGroup();
+    
+    game.physics.enable(asteroids, Phaser.Physics.ARCADE);
+
+    var x = 0;
+    var y = 0;
+
+    for(var k = 0; k < 25; k++){
+        var asteroid = asteroids.create(k * 25, game.rnd.integerInRange(600, 1500), "asteroid");
+        if (Math.random())
+        x += game.world.randomX;
+        if(x>=500){
+            x = 0;
+        }
+        y+= game.world.randomY;
+    }
+
+    asteroid.body.collideWorldBounds = true;
+    asteroids.setAll("body.allowGravity", false);
+    asteroids.setAll('body.immovable', true);
 
     this.camera.follow(player);
 
@@ -163,9 +171,22 @@ function setFriction (player, platform) {
 
 function collectStars (player, stars) {
     stars.kill();
-
+    var collectSound = game.add.audio("collect-sound");
+    collectSound.play();
     score += 10;
     scoreText.text = 'Score: ' + score;
+
+
+}
+function wrapAsteroids(asteroid){
+    if (asteroid.body.velocity.x < 0 && asteroid.x <= -160)
+    {
+        asteroid.x = 800;
+    }
+    else if (asteroid.body.velocity.x > 0 && asteroid.x >= 800)
+    {
+        asteroid.x = -160;
+    }
 
 }
 function update() {
@@ -175,7 +196,11 @@ function update() {
 
     platforms.forEach(wrapPlatform, this);
 
+    asteroids.forEach(wrapAsteroids, this);
+
     this.physics.arcade.collide(player, platforms, setFriction, null, this);
+
+    this.physics.arcade.collide(player, asteroids, setFriction, null, this);
 
     //  Do this AFTER the collide check, or we won't have blocked/touching set
     var standing = player.body.blocked.down || player.body.touching.down;
@@ -188,6 +213,7 @@ function update() {
     if (cursors.left.isDown)
     {
         player.body.velocity.x = -150;
+       
 
         if (facing != 'left')
         {
@@ -228,6 +254,8 @@ function update() {
     {
         player.body.velocity.y = -275;
         jumpTimer = game.time.now + -400;
+        var jump = game.add.audio("jump-sound");
+        jump.play();
     }
 
     if (score === 500) {
@@ -247,4 +275,4 @@ function render () {
     // game.debug.bodyInfo(player, 16, 24);
 
 }
-game.state.start('mainState', true)
+game.state.start('mainState', true);
